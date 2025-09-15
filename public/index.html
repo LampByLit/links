@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lynx - Link Preview Generator</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState } = React;
+
+        function UploadForm() {
+            const [image, setImage] = useState(null);
+            const [link, setLink] = useState('');
+            const [title, setTitle] = useState('');
+            const [description, setDescription] = useState('');
+
+            const handleImageUpload = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    setImage(file);
+                }
+            };
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                console.log('Form submitted:', { image, link, title, description });
+                // TODO: Implement actual upload logic
+            };
+
+            return (
+                <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+                    <div className="max-w-md w-full space-y-8">
+                        <div>
+                            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                                Create Your Link Preview
+                            </h2>
+                            <p className="mt-2 text-center text-sm text-gray-600">
+                                Upload an image and add your link to generate a Twitter Card
+                            </p>
+                        </div>
+                        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+                            <div className="space-y-4">
+                                {/* Image Upload */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        Upload Image
+                                    </label>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleImageUpload}
+                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                    />
+                                </div>
+
+                                {/* Link Input */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        Destination Link
+                                    </label>
+                                    <input
+                                        type="url"
+                                        value={link}
+                                        onChange={(e) => setLink(e.target.value)}
+                                        placeholder="https://example.com"
+                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                        required
+                                    />
+                                </div>
+
+                                {/* Title Input */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        Title (Optional)
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                        placeholder="Your card title"
+                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                    />
+                                </div>
+
+                                {/* Description Input */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">
+                                        Description (Optional)
+                                    </label>
+                                    <textarea
+                                        value={description}
+                                        onChange={(e) => setDescription(e.target.value)}
+                                        placeholder="Your card description"
+                                        rows={3}
+                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <button
+                                    type="submit"
+                                    className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                >
+                                    Generate Link Preview
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            );
+        }
+
+        function App() {
+            return <UploadForm />;
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
