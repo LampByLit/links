@@ -30,34 +30,12 @@ async function startApp() {
     execSync('npx prisma db push', { stdio: 'inherit' });
     console.log('✅ Database initialized successfully');
     
-    // Start the application using spawn instead of execSync
+    // Start the application directly
     console.log('🎯 Starting server...');
-    const server = spawn('node', ['dist/app.js'], {
-      stdio: 'inherit',
-      env: process.env
-    });
+    console.log('🚀 Server should be running now...');
     
-    // Handle server process events
-    server.on('error', (error) => {
-      console.error('❌ Server failed to start:', error);
-      process.exit(1);
-    });
-    
-    server.on('exit', (code, signal) => {
-      console.log(`🛑 Server exited with code ${code} and signal ${signal}`);
-      process.exit(code || 0);
-    });
-    
-    // Handle graceful shutdown
-    process.on('SIGTERM', () => {
-      console.log('🛑 Received SIGTERM, shutting down gracefully...');
-      server.kill('SIGTERM');
-    });
-    
-    process.on('SIGINT', () => {
-      console.log('🛑 Received SIGINT, shutting down gracefully...');
-      server.kill('SIGINT');
-    });
+    // Import and start the app directly instead of spawning
+    require('../dist/app.js');
     
   } catch (error) {
     console.error('❌ Startup failed:', error);
