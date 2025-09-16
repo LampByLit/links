@@ -36,7 +36,12 @@ app.use('/uploads', express.static('data/uploads'));
 
 // Basic health check (must come before catch-all routes)
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  res.status(200).json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    port: PORT
+  });
 });
 
 // API Routes

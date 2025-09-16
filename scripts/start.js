@@ -25,17 +25,23 @@ async function startApp() {
       console.log('📊 To fix: Connect PostgreSQL service in Railway dashboard');
     }
     
-    // Initialize database if needed
-    console.log('📊 Initializing database...');
-    execSync('npx prisma db push', { stdio: 'inherit' });
-    console.log('✅ Database initialized successfully');
-    
-    // Start the application directly
+    // Start the application first (for health checks)
     console.log('🎯 Starting server...');
     console.log('🚀 Server should be running now...');
     
-    // Import and start the app directly instead of spawning
+    // Import and start the app directly
     require('../dist/app.js');
+    
+    // Initialize database in the background after server starts
+    setTimeout(async () => {
+      try {
+        console.log('📊 Initializing database...');
+        execSync('npx prisma db push', { stdio: 'inherit' });
+        console.log('✅ Database initialized successfully');
+      } catch (error) {
+        console.error('❌ Database initialization failed:', error);
+      }
+    }, 2000); // Wait 2 seconds for server to start
     
   } catch (error) {
     console.error('❌ Startup failed:', error);

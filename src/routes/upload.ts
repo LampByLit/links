@@ -30,9 +30,10 @@ router.post('/upload', uploadRateLimit, upload.single('image'), async (req, res)
     const slug = generateSlug();
 
     // Process image for selected Twitter Card format
-    const uploadDir = process.env.UPLOAD_DIR || path.join(process.cwd(), 'data', 'uploads');
     const processedImagePath = path.join(
-      uploadDir, 
+      process.cwd(), 
+      'data', 
+      'uploads', 
       `processed-${slug}.jpg`
     );
 
@@ -89,9 +90,10 @@ router.post('/upload', uploadRateLimit, upload.single('image'), async (req, res)
     }
     
     // Clean up processed image if it exists
-    const uploadDir = process.env.UPLOAD_DIR || path.join(process.cwd(), 'data', 'uploads');
     const processedImagePath = path.join(
-      uploadDir, 
+      process.cwd(), 
+      'data', 
+      'uploads', 
       `processed-${req.body.slug || 'unknown'}.jpg`
     );
     await ImageProcessor.cleanupFile(processedImagePath);
