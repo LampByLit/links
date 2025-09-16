@@ -4,7 +4,7 @@
   "description": "Customizable Link Preview Generator for Twitter Cards",
   "main": "dist/app.js",
   "scripts": {
-    "start": "node --optimize-for-size --max-old-space-size=460 dist/app.js",
+    "start": "node --optimize-for-size --max-old-space-size=400 --gc-interval=100 dist/app.js",
     "dev": "nodemon src/app.ts",
     "build": "tsc",
     "db:generate": "prisma generate",
