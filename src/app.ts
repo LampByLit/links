@@ -52,16 +52,14 @@ app.get('*', (req, res) => {
   res.sendFile('index.html', { root: 'public' });
 });
 
-// Initialize database in background (delayed to reduce startup memory pressure)
-setTimeout(() => {
-  try {
-    console.log('📊 Initializing database...');
-    execSync('npx prisma db push', { stdio: 'inherit' });
-    console.log('✅ Database initialized successfully');
-  } catch (error) {
-    console.error('❌ Database initialization failed:', error);
-  }
-}, 5000); // Increased delay to 5 seconds
+// Initialize database before starting server
+try {
+  console.log('📊 Initializing database...');
+  execSync('npx prisma db push', { stdio: 'inherit' });
+  console.log('✅ Database initialized successfully');
+} catch (error) {
+  console.error('❌ Database initialization failed:', error);
+}
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Lynx server running on port ${PORT}`);
