@@ -3,7 +3,6 @@ import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
 import dotenv from 'dotenv';
-import { execSync } from 'child_process';
 import uploadRouter from './routes/upload';
 import cardsRouter from './routes/cards';
 
@@ -36,9 +35,20 @@ app.use(express.static('public'));
 app.use('/uploads', express.static('data/uploads'));
 
 // Basic health check (must come before catch-all routes)
-app.get('/health', (req, res) => {
+app.get('/health', async (req, res) => {
   console.log('🏥 Health check requested');
-  res.status(200).send('OK');
+  try {
+    // Test database connection
+    const { PrismaClient } = await import('@prisma/client');
+    const prisma = new PrismaClient();
+    await prisma.$connect();
+    await prisma.$disconnect();
+    console.log('✅ Database connection healthy');
+    res.status(200).json({ status: 'ok', database: 'connected' });
+  } catch (error) {
+    console.error('❌ Database connection failed:', error);
+    res.status(500).json({ status: 'error', database: 'disconnected' });
+  }
 });
 
 // API Routes
@@ -52,14 +62,8 @@ app.get('*', (req, res) => {
   res.sendFile('index.html', { root: 'public' });
 });
 
-// Initialize database before starting server
-try {
-  console.log('📊 Initializing database...');
-  execSync('npx prisma db push', { stdio: 'inherit' });
-  console.log('✅ Database initialized successfully');
-} catch (error) {
-  console.error('❌ Database initialization failed:', error);
-}
+// Database should be initialized during build phase
+console.log('📊 Database connection will be tested on first request');
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Lynx server running on port ${PORT}`);

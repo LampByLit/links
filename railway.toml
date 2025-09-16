@@ -9,3 +9,7 @@ restartPolicyMaxRetries = 10
 [env]
 NODE_ENV = "production"
 PORT = "3000"
+
+[deploy.healthcheck]
+path = "/health"
+timeout = 30
