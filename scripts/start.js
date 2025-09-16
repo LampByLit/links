@@ -32,6 +32,7 @@ async function startApp() {
     
     // Start the application
     console.log('🎯 Starting server...');
+    console.log('🚀 Server should be running now...');
     execSync('node dist/app.js', { stdio: 'inherit' });
     
   } catch (error) {
