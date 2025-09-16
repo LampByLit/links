@@ -1,4 +1,4 @@
-const { execSync } = require('child_process');
+const { execSync, spawn } = require('child_process');
 const path = require('path');
 
 // Load environment variables, but don't override existing ones (Railway takes precedence)
@@ -30,10 +30,34 @@ async function startApp() {
     execSync('npx prisma db push', { stdio: 'inherit' });
     console.log('✅ Database initialized successfully');
     
-    // Start the application
+    // Start the application using spawn instead of execSync
     console.log('🎯 Starting server...');
-    console.log('🚀 Server should be running now...');
-    execSync('node dist/app.js', { stdio: 'inherit' });
+    const server = spawn('node', ['dist/app.js'], {
+      stdio: 'inherit',
+      env: process.env
+    });
+    
+    // Handle server process events
+    server.on('error', (error) => {
+      console.error('❌ Server failed to start:', error);
+      process.exit(1);
+    });
+    
+    server.on('exit', (code, signal) => {
+      console.log(`🛑 Server exited with code ${code} and signal ${signal}`);
+      process.exit(code || 0);
+    });
+    
+    // Handle graceful shutdown
+    process.on('SIGTERM', () => {
+      console.log('🛑 Received SIGTERM, shutting down gracefully...');
+      server.kill('SIGTERM');
+    });
+    
+    process.on('SIGINT', () => {
+      console.log('🛑 Received SIGINT, shutting down gracefully...');
+      server.kill('SIGINT');
+    });
     
   } catch (error) {
     console.error('❌ Startup failed:', error);
