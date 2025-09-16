@@ -4,13 +4,13 @@
   "description": "Customizable Link Preview Generator for Twitter Cards",
   "main": "dist/app.js",
   "scripts": {
-    "start": "node dist/app.js",
+    "start": "node scripts/start.js",
     "dev": "nodemon src/app.ts",
     "build": "tsc",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate deploy",
-    "postinstall": "prisma generate && npx prisma db push && echo 'Database initialized successfully'",
+    "postinstall": "prisma generate",
     "init-db": "node scripts/init-db.js"
   },
   "dependencies": {
