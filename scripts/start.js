@@ -20,10 +20,9 @@ async function startApp() {
     
     // Check if we're using SQLite instead of PostgreSQL
     if (process.env.DATABASE_URL.startsWith('file:')) {
-      console.error('❌ Using SQLite instead of PostgreSQL!');
-      console.log('❌ Railway should provide PostgreSQL DATABASE_URL, but got:', process.env.DATABASE_URL);
-      console.log('📊 Available Railway env vars:', Object.keys(process.env).filter(key => key.includes('RAILWAY') || key.includes('POSTGRES')));
-      process.exit(1);
+      console.log('⚠️  Using SQLite instead of PostgreSQL');
+      console.log('⚠️  Railway PostgreSQL service not connected - using local SQLite');
+      console.log('📊 To fix: Connect PostgreSQL service in Railway dashboard');
     }
     
     // Initialize database if needed
