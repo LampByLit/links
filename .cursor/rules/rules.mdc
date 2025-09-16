@@ -9,6 +9,7 @@ alwaysApply: true
 ATTENTION: 
 !! NEVER GO OUTSIDE THE SCOPE OF THE TASK BEING DELEGATED !!
 !! ASK QUESTIONS IF NECESSARY !!
+!! CLOSE TERMINALS WHEN YOU ARE FINISHED USING THEM !!
 
 **Lynx** is a customizable link preview generator that creates Twitter Cards with user-uploaded images and custom metadata. The app allows users to upload an image, add a destination link, and optionally include title/description text. It generates a unique shareable URL that displays as a custom Twitter Card when posted on X (Twitter), with the image being clickable and redirecting to the target link.
 
