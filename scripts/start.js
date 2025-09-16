@@ -1,8 +1,18 @@
 const { execSync } = require('child_process');
+require('dotenv').config();
 
 async function startApp() {
   try {
     console.log('🚀 Starting Lynx application...');
+    
+    // Check if DATABASE_URL is available
+    if (!process.env.DATABASE_URL) {
+      console.error('❌ DATABASE_URL environment variable not found');
+      console.log('Available environment variables:', Object.keys(process.env).filter(key => key.includes('DATABASE') || key.includes('POSTGRES')));
+      process.exit(1);
+    }
+    
+    console.log('📊 DATABASE_URL found:', process.env.DATABASE_URL.substring(0, 20) + '...');
     
     // Initialize database if needed
     console.log('📊 Initializing database...');
