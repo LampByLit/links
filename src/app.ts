@@ -50,7 +50,7 @@ app.get('*', (req, res) => {
   res.sendFile('index.html', { root: 'public' });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Lynx server running on port ${PORT}`);
   console.log(`📱 Health check: http://localhost:${PORT}/health`);
 });
