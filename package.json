@@ -10,7 +10,8 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate deploy",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate && node scripts/init-db.js",
+    "init-db": "node scripts/init-db.js"
   },
   "dependencies": {
     "express": "^4.18.2",
