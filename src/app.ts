@@ -11,7 +11,7 @@ import cardsRouter from './routes/cards';
 dotenv.config();
 
 const app = express();
-const PORT = parseInt(process.env.PORT || '3001', 10);
+const PORT = parseInt(process.env.PORT || '3000', 10);
 
 // Middleware
 app.use(helmet({
@@ -37,12 +37,8 @@ app.use('/uploads', express.static('data/uploads'));
 
 // Basic health check (must come before catch-all routes)
 app.get('/health', (req, res) => {
-  res.status(200).json({ 
-    status: 'ok', 
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    port: PORT
-  });
+  console.log('🏥 Health check requested');
+  res.status(200).send('OK');
 });
 
 // API Routes
@@ -70,4 +66,7 @@ setTimeout(() => {
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Lynx server running on port ${PORT}`);
   console.log(`📱 Health check: http://localhost:${PORT}/health`);
+  console.log(`🌐 Server bound to: 0.0.0.0:${PORT}`);
+  console.log(`📊 Environment: ${process.env.NODE_ENV}`);
+  console.log(`🔗 Railway URL: ${process.env.RAILWAY_PUBLIC_DOMAIN || 'Not set'}`);
 });
