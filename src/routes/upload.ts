@@ -99,24 +99,6 @@ router.post('/upload', uploadRateLimit, upload.single('image'), async (req, res)
     await ImageProcessor.cleanupFile(processedImagePath);
     
     res.status(500).json({ error: 'Failed to process image' });
-  } catch (error) {
-    console.error('Upload error:', error);
-    
-    // Clean up file if it exists
-    if (req.file) {
-      await ImageProcessor.cleanupFile(req.file.path);
-    }
-    
-    // Clean up processed image if it exists
-    const processedImagePath = path.join(
-      process.cwd(), 
-      'data', 
-      'uploads', 
-      `processed-${req.body.slug || 'unknown'}.jpg`
-    );
-    await ImageProcessor.cleanupFile(processedImagePath);
-    
-    res.status(500).json({ error: 'Failed to process image' });
   }
 });
 

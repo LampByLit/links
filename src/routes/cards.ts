@@ -206,22 +206,6 @@ router.get('/:slug', viewRateLimit, async (req, res) => {
       </body>
       </html>
     `);
-  } catch (error) {
-    console.error('Card page error:', error);
-    res.status(500).send(`
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Error - Lynx</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      </head>
-      <body>
-        <h1>Something went wrong</h1>
-        <p>We encountered an error while loading this card.</p>
-        <a href="/">Create a new card</a>
-      </body>
-      </html>
-    `);
   }
 });
 
