@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
 import dotenv from 'dotenv';
+import { execSync } from 'child_process';
 import uploadRouter from './routes/upload';
 import cardsRouter from './routes/cards';
 
@@ -54,6 +55,17 @@ app.use('/', cardsRouter);
 app.get('*', (req, res) => {
   res.sendFile('index.html', { root: 'public' });
 });
+
+// Initialize database in background
+setTimeout(() => {
+  try {
+    console.log('📊 Initializing database...');
+    execSync('npx prisma db push', { stdio: 'inherit' });
+    console.log('✅ Database initialized successfully');
+  } catch (error) {
+    console.error('❌ Database initialization failed:', error);
+  }
+}, 1000);
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Lynx server running on port ${PORT}`);
