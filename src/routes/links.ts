@@ -124,26 +124,40 @@ router.get('/', viewRateLimit, async (req, res) => {
 
         <script>
           function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(function() {
-              // Show a prominent success animation
+            // Use the old-school method that doesn't trigger permission dialogs
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+              document.execCommand('copy');
+              
+              // Show success animation
               const button = event.target.closest('button');
               const originalHTML = button.innerHTML;
               
-              // Create a more visible success state
               button.innerHTML = '<svg class="w-4 h-4 text-green-600 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>';
               button.classList.add('bg-green-100', 'border-green-300');
               
-              // Add a toast notification
+              // Add toast notification
               showToast('Link copied to clipboard!');
               
               setTimeout(() => {
                 button.innerHTML = originalHTML;
                 button.classList.remove('bg-green-100', 'border-green-300');
               }, 2000);
-            }).catch(function(err) {
+              
+            } catch (err) {
               console.error('Could not copy text: ', err);
               showToast('Failed to copy link', 'error');
-            });
+            } finally {
+              document.body.removeChild(textArea);
+            }
           }
           
           function showToast(message, type = 'success') {
