@@ -72,7 +72,7 @@ router.get('/', viewRateLimit, async (req, res) => {
                 <table class="w-full">
                   <thead class="bg-gray-50">
                     <tr>
-                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lynx Link</th>
+                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Card Link</th>
                       <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Destination URL</th>
                       <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Clicks</th>
                       <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
@@ -116,10 +116,6 @@ router.get('/', viewRateLimit, async (req, res) => {
             `}
           </div>
 
-          <!-- Footer -->
-          <div class="text-center mt-8 text-sm text-gray-500">
-            <p>Powered by <a href="https://lampbylit.com" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800">LampByLit</a></p>
-          </div>
         </div>
 
         <script>
