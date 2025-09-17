@@ -9,7 +9,7 @@ restartPolicyMaxRetries = 10
 [env]
 NODE_ENV = "production"
 PORT = "3000"
-DATABASE_URL = "file:./data/lynx.db"
+DATABASE_URL = "file:/data/lynx.db"
 
 [deploy.healthcheck]
 path = "/health"

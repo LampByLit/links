@@ -57,11 +57,19 @@ app.get('*', (req, res) => {
   res.sendFile('index.html', { root: 'public' });
 });
 
-// Initialize SQLite database on startup
+// Initialize SQLite database on startup (only if it doesn't exist)
 try {
-  console.log('📊 Initializing SQLite database...');
-  execSync('npx prisma db push', { stdio: 'inherit' });
-  console.log('✅ SQLite database initialized successfully');
+  console.log('📊 Checking SQLite database...');
+  const fs = require('fs');
+  const dbPath = process.env.DATABASE_URL?.replace('file:', '') || './dev.db';
+  
+  if (!fs.existsSync(dbPath)) {
+    console.log('📊 Creating new SQLite database...');
+    execSync('npx prisma db push', { stdio: 'inherit' });
+    console.log('✅ SQLite database created successfully');
+  } else {
+    console.log('✅ SQLite database already exists, skipping creation');
+  }
 } catch (error) {
   console.error('❌ Database initialization failed:', error);
 }
