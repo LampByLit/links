@@ -22,7 +22,6 @@
             const [image, setImage] = useState(null);
             const [link, setLink] = useState('');
             const [title, setTitle] = useState('');
-            const [description, setDescription] = useState('');
             const [previewUrl, setPreviewUrl] = useState('');
             const [isLoading, setIsLoading] = useState(false);
             const previewRef = React.useRef(null);
@@ -48,7 +47,6 @@
                 formData.append('image', image);
                 formData.append('link', link);
                 formData.append('title', title);
-                formData.append('description', description);
 
                 try {
                     const response = await fetch('/api/upload', {
@@ -156,19 +154,6 @@
                                     />
                                 </div>
 
-                                {/* Description Input */}
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">
-                                        Description (Optional)
-                                    </label>
-                                    <textarea
-                                        value={description}
-                                        onChange={(e) => setDescription(e.target.value)}
-                                        placeholder="Your card description"
-                                        rows={3}
-                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                    />
-                                </div>
                             </div>
 
 
