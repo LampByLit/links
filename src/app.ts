@@ -35,20 +35,9 @@ app.use(express.static('public'));
 app.use('/uploads', express.static('data/uploads'));
 
 // Basic health check (must come before catch-all routes)
-app.get('/health', async (req, res) => {
+app.get('/health', (req, res) => {
   console.log('🏥 Health check requested');
-  try {
-    // Test database connection
-    const { PrismaClient } = await import('@prisma/client');
-    const prisma = new PrismaClient();
-    await prisma.$connect();
-    await prisma.$disconnect();
-    console.log('✅ Database connection healthy');
-    res.status(200).json({ status: 'ok', database: 'connected' });
-  } catch (error) {
-    console.error('❌ Database connection failed:', error);
-    res.status(500).json({ status: 'error', database: 'disconnected' });
-  }
+  res.status(200).send('OK');
 });
 
 // API Routes
