@@ -10,6 +10,7 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate deploy",
+    "db:fix-images": "node scripts/fix-image-urls.js",
     "postinstall": "prisma generate"
   },
   "dependencies": {

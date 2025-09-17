@@ -35,13 +35,15 @@ app.use(cors());
 app.use(compression());
 app.use(express.json());
 app.use(express.static('public'));
-app.use('/uploads', express.static('data/uploads'));
 
 // Basic health check (must come before catch-all routes)
 app.get('/health', (req, res) => {
   console.log('🏥 Health check requested');
   res.status(200).send('OK');
 });
+
+// Static file serving (must come before card routes)
+app.use('/uploads', express.static('data/uploads'));
 
 // API Routes
 app.use('/api', uploadRouter);
