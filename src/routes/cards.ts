@@ -86,17 +86,15 @@ router.get('/:slug', viewRateLimit, async (req, res) => {
         
         <title>${card.title || 'Link Preview'} - Lynx</title>
         
-        <!-- Redirect script for human visitors -->
+        <!-- Instant redirect for human visitors -->
         <script>
           // Check if this is a bot/crawler
           const userAgent = navigator.userAgent.toLowerCase();
           const isBot = /bot|crawler|spider|crawling|facebook|twitter|linkedin|whatsapp|telegram|slack|discord/i.test(userAgent);
           
           if (!isBot) {
-            // Redirect human visitors after a short delay
-            setTimeout(() => {
-              window.location.href = '${card.targetUrl}';
-            }, 1000);
+            // Instant redirect for human visitors
+            window.location.replace('${card.targetUrl}');
           }
         </script>
         
