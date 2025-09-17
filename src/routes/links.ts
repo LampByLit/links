@@ -68,13 +68,12 @@ router.get('/', viewRateLimit, async (req, res) => {
                 </a>
               </div>
             ` : `
-              <div class="overflow-x-auto">
+              <div class="w-full">
                 <table class="w-full">
                   <thead class="bg-gray-50">
                     <tr>
                       <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lynx Link</th>
                       <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Destination URL</th>
-                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
                       <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Clicks</th>
                       <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
                     </tr>
@@ -82,7 +81,7 @@ router.get('/', viewRateLimit, async (req, res) => {
                   <tbody class="bg-white divide-y divide-gray-200">
                     ${cards.map(card => `
                       <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4 whitespace-nowrap">
+                        <td class="px-6 py-4">
                           <div class="flex items-center">
                             <a href="${baseUrl}/${card.slug}" target="_blank" class="text-blue-600 hover:text-blue-800 font-mono text-sm">
                               ${baseUrl}/${card.slug}
@@ -99,17 +98,14 @@ router.get('/', viewRateLimit, async (req, res) => {
                           </div>
                         </td>
                         <td class="px-6 py-4">
-                          <a href="${card.targetUrl}" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm max-w-xs truncate block">
+                          <a href="${card.targetUrl}" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm">
                             ${card.targetUrl}
                           </a>
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-900">
-                          ${card.title || '<span class="text-gray-400 italic">No title</span>'}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           ${card.clickCount}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td class="px-6 py-4 text-sm text-gray-500">
                           ${new Date(card.createdAt).toLocaleDateString()} ${new Date(card.createdAt).toLocaleTimeString()}
                         </td>
                       </tr>
@@ -129,16 +125,59 @@ router.get('/', viewRateLimit, async (req, res) => {
         <script>
           function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(function() {
-              // Show a brief success message
+              // Show a prominent success animation
               const button = event.target.closest('button');
               const originalHTML = button.innerHTML;
-              button.innerHTML = '<svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
+              
+              // Create a more visible success state
+              button.innerHTML = '<svg class="w-4 h-4 text-green-600 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>';
+              button.classList.add('bg-green-100', 'border-green-300');
+              
+              // Add a toast notification
+              showToast('Link copied to clipboard!');
+              
               setTimeout(() => {
                 button.innerHTML = originalHTML;
-              }, 1000);
+                button.classList.remove('bg-green-100', 'border-green-300');
+              }, 2000);
             }).catch(function(err) {
               console.error('Could not copy text: ', err);
+              showToast('Failed to copy link', 'error');
             });
+          }
+          
+          function showToast(message, type = 'success') {
+            // Remove existing toast if any
+            const existingToast = document.getElementById('toast');
+            if (existingToast) {
+              existingToast.remove();
+            }
+            
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.id = 'toast';
+            toast.className = `fixed top-4 right-4 z-50 px-4 py-2 rounded-md shadow-lg text-white font-medium transform transition-all duration-300 ${
+              type === 'success' ? 'bg-green-500' : 'bg-red-500'
+            }`;
+            toast.textContent = message;
+            
+            // Add to page
+            document.body.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+              toast.classList.add('translate-x-0', 'opacity-100');
+            }, 10);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+              toast.classList.add('translate-x-full', 'opacity-0');
+              setTimeout(() => {
+                if (toast.parentNode) {
+                  toast.remove();
+                }
+              }, 300);
+            }, 3000);
           }
         </script>
       </body>
