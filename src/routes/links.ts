@@ -156,9 +156,8 @@ router.get('/', viewRateLimit, async (req, res) => {
             // Create toast element
             const toast = document.createElement('div');
             toast.id = 'toast';
-            toast.className = `fixed top-4 right-4 z-50 px-4 py-2 rounded-md shadow-lg text-white font-medium transform transition-all duration-300 ${
-              type === 'success' ? 'bg-green-500' : 'bg-red-500'
-            }`;
+            toast.className = 'fixed top-4 right-4 z-50 px-4 py-2 rounded-md shadow-lg text-white font-medium transform transition-all duration-300 ' + 
+              (type === 'success' ? 'bg-green-500' : 'bg-red-500');
             toast.textContent = message;
             
             // Add to page
