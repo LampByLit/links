@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import { execSync } from 'child_process';
 import uploadRouter from './routes/upload';
 import cardsRouter from './routes/cards';
+import linksRouter from './routes/links';
 
 // Load environment variables
 dotenv.config();
@@ -44,6 +45,9 @@ app.get('/health', (req, res) => {
 
 // API Routes
 app.use('/api', uploadRouter);
+
+// Links list page
+app.use('/links', linksRouter);
 
 // Card pages (must come before the catch-all route)
 app.use('/', cardsRouter);
