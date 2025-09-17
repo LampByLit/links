@@ -18,7 +18,7 @@ router.post('/upload', uploadRateLimit, upload.single('image'), async (req, res)
       return res.status(400).json({ error: 'No image file provided' });
     }
 
-    const { link, title, description, imageFormat, cropData } = req.body;
+    const { link, title, description } = req.body;
 
     if (!link) {
       // Clean up uploaded file if no link provided
@@ -37,27 +37,10 @@ router.post('/upload', uploadRateLimit, upload.single('image'), async (req, res)
       `processed-${slug}.jpg`
     );
 
-    // Parse crop data if provided
-    let cropOptions = undefined;
-    if (cropData) {
-      try {
-        const parsedCropData = JSON.parse(cropData);
-        cropOptions = {
-          cropX: parsedCropData.cropX,
-          cropY: parsedCropData.cropY,
-          cropWidth: parsedCropData.cropWidth,
-          cropHeight: parsedCropData.cropHeight
-        };
-      } catch (error) {
-        console.error('Error parsing crop data:', error);
-      }
-    }
-
+    // Process image to landscape format (1200x600)
     await ImageProcessor.generateTwitterCardImage(
       req.file.path, 
-      processedImagePath, 
-      imageFormat || 'landscape',
-      cropOptions
+      processedImagePath
     );
 
     // Clean up original uploaded file
@@ -70,8 +53,7 @@ router.post('/upload', uploadRateLimit, upload.single('image'), async (req, res)
         targetUrl: link,
         title: title || null,
         description: description || null,
-        imageUrl: `/uploads/processed-${slug}.jpg`,
-        imageFormat: imageFormat || 'landscape'
+        imageUrl: `/uploads/processed-${slug}.jpg`
       }
     });
 
@@ -94,7 +76,7 @@ router.post('/upload', uploadRateLimit, upload.single('image'), async (req, res)
       process.cwd(), 
       'data', 
       'uploads', 
-      `processed-${req.body.slug || 'unknown'}.jpg`
+      `processed-${generateSlug()}.jpg`
     );
     await ImageProcessor.cleanupFile(processedImagePath);
     

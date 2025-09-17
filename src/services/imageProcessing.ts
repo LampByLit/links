@@ -41,51 +41,19 @@ export class ImageProcessor {
   }
 
   /**
-   * Generate optimized image for specific Twitter Card format
+   * Generate optimized image for Twitter Cards (always landscape format)
    */
   static async generateTwitterCardImage(
     inputPath: string,
-    outputPath: string,
-    format: 'portrait' | 'landscape' | 'square',
-    cropOptions?: {
-      cropX: number;
-      cropY: number;
-      cropWidth: number;
-      cropHeight: number;
-    }
+    outputPath: string
   ): Promise<void> {
-    const formatSpecs = {
-      portrait: { width: 400, height: 600 },
-      landscape: { width: 1200, height: 600 },
-      square: { width: 400, height: 400 }
-    };
-
-    const specs = formatSpecs[format];
-
-    if (cropOptions) {
-      // Apply custom cropping
-      await sharp(inputPath)
-        .extract({
-          left: Math.round(cropOptions.cropX),
-          top: Math.round(cropOptions.cropY),
-          width: Math.round(cropOptions.cropWidth),
-          height: Math.round(cropOptions.cropHeight)
-        })
-        .resize(specs.width, specs.height, {
-          fit: 'cover',
-          position: 'center'
-        })
-        .jpeg({ quality: 85 })
-        .toFile(outputPath);
-    } else {
-      // Use default processing
-      await this.processImage(inputPath, outputPath, {
-        width: specs.width,
-        height: specs.height,
-        quality: 85,
-        format: 'jpeg'
-      });
-    }
+    // Always use landscape format (1200x600) for consistent Twitter Card display
+    await this.processImage(inputPath, outputPath, {
+      width: 1200,
+      height: 600,
+      quality: 85,
+      format: 'jpeg'
+    });
   }
 
   /**

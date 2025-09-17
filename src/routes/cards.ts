@@ -58,21 +58,8 @@ router.get('/:slug', viewRateLimit, async (req, res) => {
     const imageUrl = `${baseUrl}${card.imageUrl}`;
     const cardUrl = `${baseUrl}/${slug}`;
 
-    // Determine Twitter Card type based on image format
-    const getTwitterCardType = (format: string) => {
-      switch (format) {
-        case 'portrait':
-          return 'summary';
-        case 'landscape':
-          return 'summary_large_image';
-        case 'square':
-          return 'summary_large_image'; // Square images work well with large image cards
-        default:
-          return 'summary_large_image';
-      }
-    };
-
-    const twitterCardType = getTwitterCardType(card.imageFormat);
+    // Always use summary_large_image for consistent prominent display
+    const twitterCardType = 'summary_large_image';
 
     // Generate Twitter Card metadata
     const twitterCardHtml = `
