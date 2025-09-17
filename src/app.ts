@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
 import dotenv from 'dotenv';
+import { execSync } from 'child_process';
 import uploadRouter from './routes/upload';
 import cardsRouter from './routes/cards';
 
@@ -51,8 +52,14 @@ app.get('*', (req, res) => {
   res.sendFile('index.html', { root: 'public' });
 });
 
-// Database should be initialized during build phase
-console.log('📊 Database connection will be tested on first request');
+// Initialize SQLite database on startup
+try {
+  console.log('📊 Initializing SQLite database...');
+  execSync('npx prisma db push', { stdio: 'inherit' });
+  console.log('✅ SQLite database initialized successfully');
+} catch (error) {
+  console.error('❌ Database initialization failed:', error);
+}
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Lynx server running on port ${PORT}`);
