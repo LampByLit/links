@@ -22,8 +22,7 @@ export class ImageProcessor {
 
     await sharp(inputPath)
       .resize(width, height, {
-        fit: 'cover', // Crop to fit exact dimensions
-        position: 'center' // Center the crop
+        fit: 'cover' // Resize to fit exact dimensions
       })
       .jpeg({ quality })
       .toFile(outputPath);

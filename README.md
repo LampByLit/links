@@ -5,9 +5,7 @@ A customizable link preview generator that creates Twitter Cards with user-uploa
 ## 🚀 Features
 
 - **Image Upload & Processing**: Upload images and automatically optimize them for Twitter Cards
-- **Multiple Card Formats**: Support for Portrait, Landscape, and Square Twitter Card formats
-- **Smart Image Analysis**: Automatic format recommendations based on image dimensions
-- **Interactive Cropping**: User-controlled image cropping with real-time preview
+- **Landscape Format**: All images processed to 1200×600px for consistent Twitter Card display
 - **Click Tracking**: Analytics for card views and clicks
 - **Rate Limiting**: Built-in abuse prevention
 - **Responsive Design**: Modern UI with Tailwind CSS
@@ -93,14 +91,10 @@ lynx/
 │   │   ├── upload.ts          # Image upload endpoint
 │   │   └── cards.ts           # Card page rendering
 │   ├── services/              # Business logic
-│   │   ├── imageProcessing.ts # Image optimization
-│   │   └── imageAnalysis.ts   # Format recommendations
+│   │   └── imageProcessing.ts # Image optimization
 │   ├── middleware/            # Express middleware
 │   │   ├── upload.ts          # File upload handling
 │   │   └── rateLimit.ts       # Rate limiting
-│   ├── components/            # React components
-│   │   ├── CropTool.tsx       # Image cropping interface
-│   │   └── FormatPreview.tsx  # Format selection
 │   └── utils/                 # Utility functions
 │       └── slugGenerator.ts   # URL slug generation
 ├── prisma/
@@ -126,8 +120,6 @@ Fields:
 - link: Destination URL (required)
 - title: Card title (optional)
 - description: Card description (optional)
-- imageFormat: 'portrait' | 'landscape' | 'square' (required)
-- cropData: JSON string with crop coordinates (optional)
 ```
 
 ### View Card

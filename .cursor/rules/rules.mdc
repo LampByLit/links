@@ -73,11 +73,11 @@ Since images aren't directly clickable on Twitter, Lynx creates a workaround by 
 - **Minimum Size**: 800x418px (our standard), 300x157px (X Cards minimum)
 - **Format**: WebP or JPEG with 70-85% quality
 - **Supported Formats**: JPG, PNG, WEBP, GIF (per X Cards spec)
-- **Processing**: Automatic resizing, smart cropping, compression
+- **Processing**: Automatic resizing and compression
 - **File Size Limit**: 5-10MB max upload to prevent abuse
 - **HTTPS Required**: All image URLs must use HTTPS for X Cards
 - **Storage**: Optimized images stored in `/data/uploads` directory
-- **User Image Control**: Users can upload either 16:9 or 2:1 aspect ratio images, and the app provides image centering/cropping functionality when uploaded images don't match the proper size or ratio, giving users control over how their image appears in the Twitter Card preview
+- **Automatic Processing**: All images are automatically resized to 1200×600px landscape format for consistent Twitter Card display
 
 ### Database Schema (Prisma)
 
