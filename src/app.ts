@@ -67,4 +67,6 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`🌐 Server bound to: 0.0.0.0:${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV}`);
   console.log(`🔗 Railway URL: ${process.env.RAILWAY_PUBLIC_DOMAIN || 'Not set'}`);
+  console.log(`🔧 PORT from env: ${process.env.PORT}`);
+  console.log(`🔧 All env vars: ${Object.keys(process.env).filter(k => k.includes('PORT') || k.includes('RAILWAY')).join(', ')}`);
 });
