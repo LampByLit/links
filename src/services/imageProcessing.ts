@@ -89,21 +89,6 @@ export class ImageProcessor {
   }
 
   /**
-   * Generate optimized image for general display (16:9 aspect ratio)
-   */
-  static async generateDisplayImage(
-    inputPath: string,
-    outputPath: string
-  ): Promise<void> {
-    await this.processImage(inputPath, outputPath, {
-      width: 1200,
-      height: 628, // 16:9 aspect ratio
-      quality: 85,
-      format: 'jpeg'
-    });
-  }
-
-  /**
    * Clean up temporary files
    */
   static async cleanupFile(filePath: string): Promise<void> {
