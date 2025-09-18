@@ -84,7 +84,7 @@ router.get('/:slug', viewRateLimit, async (req, res) => {
         <meta property="og:description" content="${card.description || 'Click to visit the link'}">
         <meta property="og:image" content="${imageUrl}">
         
-        <title>${card.title || 'Lynx Card'} - Lynx</title>
+        <title>${card.title || 'Link Preview'}</title>
         
         <!-- Instant redirect for human visitors -->
         <script>
