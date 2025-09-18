@@ -29,13 +29,8 @@ router.post('/upload', uploadRateLimit, upload.single('image'), async (req, res)
     // Generate unique slug
     const slug = generateSlug();
 
-    // Process image for selected Twitter Card format
-    const processedImagePath = path.join(
-      process.cwd(), 
-      'data', 
-      'uploads', 
-      `processed-${slug}.jpg`
-    );
+    // Process image for selected Twitter Card format - use absolute path for Railway volume
+    const processedImagePath = `/data/uploads/processed-${slug}.jpg`;
 
     // Process image to landscape format (1200x600)
     await ImageProcessor.generateTwitterCardImage(
@@ -72,12 +67,7 @@ router.post('/upload', uploadRateLimit, upload.single('image'), async (req, res)
     }
     
     // Clean up processed image if it exists
-    const processedImagePath = path.join(
-      process.cwd(), 
-      'data', 
-      'uploads', 
-      `processed-${generateSlug()}.jpg`
-    );
+    const processedImagePath = `/data/uploads/processed-${generateSlug()}.jpg`;
     await ImageProcessor.cleanupFile(processedImagePath);
     
     res.status(500).json({ error: 'Failed to process image' });

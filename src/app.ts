@@ -42,8 +42,8 @@ app.get('/health', (req, res) => {
   res.status(200).send('OK');
 });
 
-// Static file serving (must come before card routes)
-app.use('/uploads', express.static('data/uploads'));
+// Static file serving (must come before card routes) - use absolute path for Railway volume
+app.use('/uploads', express.static('/data/uploads'));
 
 // API Routes
 app.use('/api', uploadRouter);

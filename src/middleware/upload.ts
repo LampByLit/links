@@ -2,8 +2,8 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 
-// Ensure upload directory exists
-const uploadDir = path.join(process.cwd(), 'data', 'uploads');
+// Ensure upload directory exists - use absolute path for Railway volume
+const uploadDir = '/data/uploads';
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
