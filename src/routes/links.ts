@@ -38,10 +38,23 @@ router.get('/', viewRateLimit, async (req, res) => {
         <script src="https://cdn.tailwindcss.com"></script>
         <style>
           body { font-family: 'Inter', sans-serif; }
+          .url-cell { 
+            max-width: 0; 
+            width: 40%; 
+            word-break: break-all; 
+          }
+          .card-link-cell { 
+            max-width: 0; 
+            width: 30%; 
+            word-break: break-all; 
+          }
+          .table-container { 
+            overflow-x: auto; 
+          }
         </style>
       </head>
       <body class="bg-gray-50 min-h-screen">
-        <div class="max-w-4xl mx-auto py-8 px-4">
+        <div class="w-full py-8 px-4">
           <!-- Header -->
           <div class="text-center mb-8">
             <a href="https://lampbylit.com" target="_blank" rel="noopener noreferrer" class="inline-block hover:opacity-80 transition-opacity mb-4">
@@ -68,45 +81,34 @@ router.get('/', viewRateLimit, async (req, res) => {
                 </a>
               </div>
             ` : `
-              <div class="w-full">
-                <table class="w-full">
+              <div class="table-container">
+                <table class="w-full table-fixed">
                   <thead class="bg-gray-50">
                     <tr>
-                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Card Link</th>
-                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Destination URL</th>
-                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Clicks</th>
-                      <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+                      <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/3">Card Link</th>
+                      <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/5">Destination URL</th>
+                      <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16">Clicks</th>
+                      <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32">Created</th>
                     </tr>
                   </thead>
                   <tbody class="bg-white divide-y divide-gray-200">
                     ${cards.map(card => `
                       <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4">
-                          <div class="flex items-center">
-                            <a href="${baseUrl}/${card.slug}" target="_blank" class="text-blue-600 hover:text-blue-800 font-mono text-sm">
-                              ${baseUrl}/${card.slug}
-                            </a>
-                            <button 
-                              onclick="copyToClipboard('${baseUrl}/${card.slug}')"
-                              class="ml-2 p-1 text-gray-400 hover:text-gray-600"
-                              title="Copy link"
-                            >
-                              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                              </svg>
-                            </button>
-                          </div>
+                        <td class="px-4 py-4 card-link-cell">
+                          <a href="${baseUrl}/${card.slug}" target="_blank" class="text-blue-600 hover:text-blue-800 font-mono text-xs break-all">
+                            ${baseUrl}/${card.slug}
+                          </a>
                         </td>
-                        <td class="px-6 py-4">
-                          <a href="${card.targetUrl}" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm">
+                        <td class="px-4 py-4 url-cell">
+                          <a href="${card.targetUrl}" target="_blank" class="text-blue-600 hover:text-blue-800 text-xs break-all">
                             ${card.targetUrl}
                           </a>
                         </td>
-                        <td class="px-6 py-4 text-sm text-gray-900">
+                        <td class="px-4 py-4 text-sm text-gray-900 text-center">
                           ${card.clickCount}
                         </td>
-                        <td class="px-6 py-4 text-sm text-gray-500">
-                          ${new Date(card.createdAt).toLocaleDateString()} ${new Date(card.createdAt).toLocaleTimeString()}
+                        <td class="px-4 py-4 text-xs text-gray-500">
+                          ${new Date(card.createdAt).toLocaleDateString()}<br>${new Date(card.createdAt).toLocaleTimeString()}
                         </td>
                       </tr>
                     `).join('')}
@@ -118,77 +120,7 @@ router.get('/', viewRateLimit, async (req, res) => {
 
         </div>
 
-        <script>
-          function copyToClipboard(text) {
-            // Use the old-school method that doesn't trigger permission dialogs
-            const textArea = document.createElement('textarea');
-            textArea.value = text;
-            textArea.style.position = 'fixed';
-            textArea.style.left = '-999999px';
-            textArea.style.top = '-999999px';
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            
-            try {
-              document.execCommand('copy');
-              
-              // Show success animation
-              const button = event.target.closest('button');
-              const originalHTML = button.innerHTML;
-              
-              button.innerHTML = '<svg class="w-4 h-4 text-green-600 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>';
-              button.classList.add('bg-green-100', 'border-green-300');
-              
-              // Add toast notification
-              showToast('Link copied to clipboard!');
-              
-              setTimeout(() => {
-                button.innerHTML = originalHTML;
-                button.classList.remove('bg-green-100', 'border-green-300');
-              }, 2000);
-              
-            } catch (err) {
-              console.error('Could not copy text: ', err);
-              showToast('Failed to copy link', 'error');
-            } finally {
-              document.body.removeChild(textArea);
-            }
-          }
-          
-          function showToast(message, type = 'success') {
-            // Remove existing toast if any
-            const existingToast = document.getElementById('toast');
-            if (existingToast) {
-              existingToast.remove();
-            }
-            
-            // Create toast element
-            const toast = document.createElement('div');
-            toast.id = 'toast';
-            toast.className = 'fixed top-4 right-4 z-50 px-4 py-2 rounded-md shadow-lg text-white font-medium transform transition-all duration-300 ' + 
-              (type === 'success' ? 'bg-green-500' : 'bg-red-500');
-            toast.textContent = message;
-            
-            // Add to page
-            document.body.appendChild(toast);
-            
-            // Animate in
-            setTimeout(() => {
-              toast.classList.add('translate-x-0', 'opacity-100');
-            }, 10);
-            
-            // Auto remove after 3 seconds
-            setTimeout(() => {
-              toast.classList.add('translate-x-full', 'opacity-0');
-              setTimeout(() => {
-                if (toast.parentNode) {
-                  toast.remove();
-                }
-              }, 300);
-            }, 3000);
-          }
-        </script>
+        <!-- No JavaScript needed for this page -->
       </body>
       </html>
     `;
