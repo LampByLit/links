@@ -38,18 +38,43 @@ router.get('/', viewRateLimit, async (req, res) => {
         <script src="https://cdn.tailwindcss.com"></script>
         <style>
           body { font-family: 'Inter', sans-serif; }
-          .url-cell { 
-            max-width: 0; 
-            width: 40%; 
-            word-break: break-all; 
+          
+          /* Mobile-first responsive design */
+          @media (max-width: 768px) {
+            .desktop-table { display: none; }
+            .mobile-cards { display: block; }
           }
-          .card-link-cell { 
-            max-width: 0; 
-            width: 30%; 
-            word-break: break-all; 
+          
+          @media (min-width: 769px) {
+            .desktop-table { display: block; }
+            .mobile-cards { display: none; }
+            .url-cell { 
+              max-width: 0; 
+              width: 40%; 
+              word-break: break-all; 
+            }
+            .card-link-cell { 
+              max-width: 0; 
+              width: 30%; 
+              word-break: break-all; 
+            }
+            .table-container { 
+              overflow-x: auto; 
+            }
           }
-          .table-container { 
-            overflow-x: auto; 
+          
+          .mobile-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
+            margin-bottom: 12px;
+            padding: 16px;
+          }
+          
+          .mobile-url {
+            word-break: break-all;
+            font-size: 12px;
+            line-height: 1.4;
           }
         </style>
       </head>
@@ -81,39 +106,76 @@ router.get('/', viewRateLimit, async (req, res) => {
                 </a>
               </div>
             ` : `
-              <div class="table-container">
-                <table class="w-full table-fixed">
-                  <thead class="bg-gray-50">
-                    <tr>
-                      <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/3">Card Link</th>
-                      <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/5">Destination URL</th>
-                      <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16">Clicks</th>
-                      <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32">Created</th>
-                    </tr>
-                  </thead>
-                  <tbody class="bg-white divide-y divide-gray-200">
-                    ${cards.map(card => `
-                      <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-4 card-link-cell">
-                          <a href="${baseUrl}/${card.slug}" target="_blank" class="text-blue-600 hover:text-blue-800 font-mono text-xs break-all">
-                            ${baseUrl}/${card.slug}
-                          </a>
-                        </td>
-                        <td class="px-4 py-4 url-cell">
-                          <a href="${card.targetUrl}" target="_blank" class="text-blue-600 hover:text-blue-800 text-xs break-all">
-                            ${card.targetUrl}
-                          </a>
-                        </td>
-                        <td class="px-4 py-4 text-sm text-gray-900 text-center">
-                          ${card.clickCount}
-                        </td>
-                        <td class="px-4 py-4 text-xs text-gray-500">
-                          ${new Date(card.createdAt).toLocaleDateString()}<br>${new Date(card.createdAt).toLocaleTimeString()}
-                        </td>
+              <!-- Desktop Table View -->
+              <div class="desktop-table">
+                <div class="table-container">
+                  <table class="w-full table-fixed">
+                    <thead class="bg-gray-50">
+                      <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/3">Card Link</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-2/5">Destination URL</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16">Clicks</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32">Created</th>
                       </tr>
-                    `).join('')}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                      ${cards.map(card => `
+                        <tr class="hover:bg-gray-50">
+                          <td class="px-4 py-4 card-link-cell">
+                            <a href="${baseUrl}/${card.slug}" target="_blank" class="text-blue-600 hover:text-blue-800 font-mono text-xs break-all">
+                              ${baseUrl}/${card.slug}
+                            </a>
+                          </td>
+                          <td class="px-4 py-4 url-cell">
+                            <a href="${card.targetUrl}" target="_blank" class="text-blue-600 hover:text-blue-800 text-xs break-all">
+                              ${card.targetUrl}
+                            </a>
+                          </td>
+                          <td class="px-4 py-4 text-sm text-gray-900 text-center">
+                            ${card.clickCount}
+                          </td>
+                          <td class="px-4 py-4 text-xs text-gray-500">
+                            ${new Date(card.createdAt).toLocaleDateString()}<br>${new Date(card.createdAt).toLocaleTimeString()}
+                          </td>
+                        </tr>
+                      `).join('')}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Mobile Card View -->
+              <div class="mobile-cards px-4">
+                ${cards.map(card => `
+                  <div class="mobile-card">
+                    <div class="flex justify-between items-start mb-3">
+                      <div class="text-sm font-medium text-gray-900">
+                        ${card.title || 'Untitled Card'}
+                      </div>
+                      <div class="text-xs text-gray-500 ml-2 flex-shrink-0">
+                        ${card.clickCount} clicks
+                      </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                      <div class="text-xs text-gray-500 mb-1">Card Link:</div>
+                      <a href="${baseUrl}/${card.slug}" target="_blank" class="text-blue-600 hover:text-blue-800 mobile-url font-mono">
+                        ${baseUrl}/${card.slug}
+                      </a>
+                    </div>
+                    
+                    <div class="mb-3">
+                      <div class="text-xs text-gray-500 mb-1">Destination:</div>
+                      <a href="${card.targetUrl}" target="_blank" class="text-blue-600 hover:text-blue-800 mobile-url">
+                        ${card.targetUrl}
+                      </a>
+                    </div>
+                    
+                    <div class="text-xs text-gray-400">
+                      Created: ${new Date(card.createdAt).toLocaleDateString()} ${new Date(card.createdAt).toLocaleTimeString()}
+                    </div>
+                  </div>
+                `).join('')}
               </div>
             `}
           </div>
