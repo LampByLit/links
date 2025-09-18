@@ -65,9 +65,9 @@ try {
   const fs = require('fs');
   const dbPath = process.env.DATABASE_URL?.replace('file:', '') || './dev.db';
   
-  // Always force schema sync to fix any schema drift issues
+  // Ensure database schema is up to date without losing data
   console.log('📊 Syncing database schema...');
-  execSync('npx prisma db push --force-reset', { stdio: 'inherit' });
+  execSync('npx prisma db push', { stdio: 'inherit' });
   console.log('✅ SQLite database initialized successfully');
 } catch (error) {
   console.error('❌ Database initialization failed:', error);
