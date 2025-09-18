@@ -72,7 +72,7 @@ router.get('/:slug', viewRateLimit, async (req, res) => {
         <!-- Twitter Card metadata -->
         <meta name="twitter:card" content="${twitterCardType}">
         <meta name="twitter:site" content="@lampbylit">
-        <meta name="twitter:title" content="${card.title || 'Link Preview'}">
+        <meta name="twitter:title" content="${card.title || '&emsp;'}">
         <meta name="twitter:description" content="${card.description || 'Click to visit the link'}">
         <meta name="twitter:image" content="${imageUrl}">
         <meta name="twitter:url" content="${cardUrl}">
@@ -80,11 +80,11 @@ router.get('/:slug', viewRateLimit, async (req, res) => {
         <!-- Open Graph metadata -->
         <meta property="og:url" content="${cardUrl}">
         <meta property="og:type" content="website">
-        <meta property="og:title" content="${card.title || 'Link Preview'}">
+        <meta property="og:title" content="${card.title || '&emsp;'}">
         <meta property="og:description" content="${card.description || 'Click to visit the link'}">
         <meta property="og:image" content="${imageUrl}">
         
-        <title>${card.title || 'Link Preview'} - Lynx</title>
+        <title>${card.title || 'Lynx Card'} - Lynx</title>
         
         <!-- Instant redirect for human visitors -->
         <script>
@@ -159,9 +159,9 @@ router.get('/:slug', viewRateLimit, async (req, res) => {
       </head>
       <body>
         <div class="card">
-          <img src="${imageUrl}" alt="${card.title || 'Link Preview'}" class="card-image">
+          <img src="${imageUrl}" alt="${card.title || ''}" class="card-image">
           <div class="card-content">
-            <h1 class="card-title">${card.title || 'Link Preview'}</h1>
+            <h1 class="card-title">${card.title || '&emsp;'}</h1>
             <p class="card-description">${card.description || 'Click to visit the link'}</p>
             <div class="redirect-message">
               <div class="spinner"></div>
