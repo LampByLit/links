@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Card {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  targetUrl   String   @map("target_url")
+  title       String?
+  description String?
+  imageUrl    String   @map("image_url")
+  createdAt   DateTime @default(now()) @map("created_at")
+  clickCount  Int      @default(0) @map("click_count")
+  
+  clicks      Click[]
+  
+  @@map("cards")
+}
+
+model Click {
+  id        String   @id @default(cuid())
+  cardSlug  String   @map("card_slug")
+  timestamp DateTime @default(now())
+  ipAddress String?  @map("ip_address")
+  userAgent String?  @map("user_agent")
+  referrer  String?
+  
+  card      Card     @relation(fields: [cardSlug], references: [slug])
+  
+  @@map("clicks")
+  @@index([cardSlug])
+  @@index([timestamp])
+}
